@@ -13,12 +13,14 @@ app.get('/', (req, res) => {
 
 // Define a route for the webhook endpoint
 app.post('/webhook', (req, res) => {
-  const payload = req.body; // Data received from the webhook
-
-  // Do something with the data (e.g., log it)
-  console.log('Received webhook data:', payload);
-
-  // Respond with a success status code (e.g., 200 OK)
+  console.log("Data", req.body)
+  var url = req.url
+  const regex = /(?<=\?code=).*/gm
+  if (url.match(regex) == null) {
+    let challenge = req.query['hub.challenge'];
+    res.send(challenge);
+  }
+    
   res.status(200).send('Webhook received successfully');
 });
 
