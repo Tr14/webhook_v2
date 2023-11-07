@@ -26,7 +26,7 @@ app.get('/webhook', (req, res) => {
 
 app.post('/webhook', (req, res) => {
   const body = req.body;
-  console.log(body.object);
+  console.log(body.entry[0].changed_fields);
 
   if (body.object === 'page') {
     body.entry.forEach((entry) => {
