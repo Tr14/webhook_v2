@@ -7,6 +7,10 @@ const port = 1337; // You can change this to your desired port
 // Middleware to parse incoming JSON data
 app.use(bodyParser.json());
 
+app.get('/', (req, res) => {
+  res.status(200).send("Welcome to AKA webhook");
+});
+
 // Define a route for the webhook endpoint
 app.post('/webhook', (req, res) => {
   const payload = req.body; // Data received from the webhook
