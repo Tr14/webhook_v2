@@ -1,8 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
 const app = express();
-const port = 1337; // You can change this to your desired port
+const port = process.env.PORT || 1337; // Use the port of your choice
+
+const VERIFY_TOKEN = 'lmaoez1234';
 
 // Middleware to parse incoming JSON data
 app.use(bodyParser.json());
@@ -11,20 +12,37 @@ app.get('/', (req, res) => {
   res.status(200).send("Welcome to AKA webhook");
 });
 
-// Define a route for the webhook endpoint
-app.post('/webhook', (req, res) => {
-  console.log("Data", req.body)
-  var url = req.url
-  const regex = /(?<=\?code=).*/gm
-  if (url.match(regex) == null) {
-    let challenge = req.query['hub.challenge'];
-    res.send(challenge);
+app.get('/webhook', (req, res) => {
+  // Use the verification token you set during webhook setup
+  const hubChallenge = req.query['hub.challenge'];
+  const hubMode = req.query['hub.mode'];
+
+  if (hubMode === 'subscribe' && req.query['hub.verify_token'] === VERIFY_TOKEN) {
+    res.status(200).send(hubChallenge);
+  } else {
+    res.sendStatus(403);
   }
-    
-  res.status(200).send('Webhook received successfully');
 });
 
-// Start the server
+app.post('/webhook', (req, res) => {
+  const body = req.body;
+
+  if (body.object === 'page') {
+    body.entry.forEach((entry) => {
+      const webhookEvent = entry.messaging[0];
+      console.log(webhookEvent);
+
+      // Handle incoming messages here
+      // You can implement your logic to respond to messages
+
+    });
+
+    res.status(200).send('EVENT_RECEIVED');
+  } else {
+    res.sendStatus(404);
+  }
+});
+
 app.listen(port, () => {
-  console.log(`Webhook server is running on port ${port}`);
+  console.log(`Facebook Messenger webhook is running on port ${port}`);
 });
