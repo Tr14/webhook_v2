@@ -33,7 +33,7 @@ app.get('/webhook', (req, res) => {
 
 app.post('/webhook', (req, res) => {
   require("log-timestamp")
-  console.log("\u001b[1;32m" + "Data: " + "\u001b[0m" + 'Facebook request body:', req.body.entry[0].changes);
+  console.log("\u001b[1;32m" + "Data: " + "\u001b[0m" + 'Facebook request body:', req.body);
 
   received_updates.unshift(req.body);
   res.sendStatus(200);
