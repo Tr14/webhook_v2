@@ -14,7 +14,13 @@ app.get('/', (req, res) => {
 
 app.get('/webhook', (req, res) => {
   console.log(req.body)
-  // Use the verification token you set during webhook setup
+  var url = req.url
+  const regex = /(?<=\?code=).*/gm
+  if (url.match(regex) == null) {
+    let challenge = req.query['hub.challenge'];
+    res.status(200).send(challenge);
+  }
+  /*Use the verification token you set during webhook setup
   const hubChallenge = req.query['hub.challenge'];
   const hubMode = req.query['hub.mode'];
   console.log(hubMode);
@@ -24,6 +30,7 @@ app.get('/webhook', (req, res) => {
   } else {
     res.sendStatus(403);
   }
+  */
 });
 
 app.post('/webhook', (req, res) => {
