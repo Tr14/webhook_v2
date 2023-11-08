@@ -15,20 +15,18 @@ app.get('/', (req, res) => {
 });
 
 app.get('/webhook', (req, res) => {
-  const hubChallenge = req.query['hub.challenge'];
-  require("log-timestamp")
-  console.log("\u001b[1;32m" + "Hub Challenge: " + "\u001b[0m" + hubChallenge)
-  res.status(200).send(hubChallenge);
-  /*Use the verification token you set during webhook setup
-  const hubMode = req.query['hub.mode'];
-  console.log(hubMode);
+  const challenge = req.query['hub.challenge'];
+  const verify_token = req.query['hub.verify_token'];
 
-  if (hubMode === 'subscribe' && req.query['hub.verify_token'] === VERIFY_TOKEN) {
-    res.status(200).send(hubChallenge);
+  if (verify_token === VERIFY_TOKEN) {
+    require("log-timestamp")
+    console.log("\u001b[1;32m" + "Hub Challenge: " + "\u001b[0m" + challenge)
+    return res.status(200).send(challenge);  // Just the challenge
   } else {
-    res.sendStatus(403);
+    require("log-timestamp")
+    console.log("\u001b[1;32m" + "Hub Challenge: " + "\u001b[0m" + "Bad request")
+    return res.status(400).send({ message: "Bad request!" });
   }
-  */
 });
 
 app.post('/webhook', (req, res) => {
