@@ -16,6 +16,7 @@ app.get('/webhook', (req, res) => {
   // Use the verification token you set during webhook setup
   const hubChallenge = req.query['hub.challenge'];
   const hubMode = req.query['hub.mode'];
+  console.log(hubMode);
 
   if (hubMode === 'subscribe' && req.query['hub.verify_token'] === VERIFY_TOKEN) {
     res.status(200).send(hubChallenge);
@@ -26,7 +27,7 @@ app.get('/webhook', (req, res) => {
 
 app.post('/webhook', (req, res) => {
   const body = req.body;
-  console.log(body.entry[0].changed_fields);
+  //console.log(body.entry[0].changed_fields);
 
   if (body.object === 'page') {
     body.entry.forEach((entry) => {
