@@ -30,7 +30,9 @@ app.get('/facebook-authorization', (req, res) => {
   require("log-timestamp");
   console.log("\u001b[1;32m" + "Facebook Authorization Code: " + "\u001b[0m" + facebook_authorization_code);
 
-  const access_token = async () => {
+  let user_access_token;
+
+  async function fetchUserToken() {
     let config_usertoken = {
       method: 'get',
       maxBodyLength: Infinity,
@@ -40,11 +42,10 @@ app.get('/facebook-authorization', (req, res) => {
     };
 
     let res_usertoken = await axios(config_usertoken);
-    let access_token = res_usertoken.data.access_token;
-    return access_token;
+    user_access_token = res_usertoken.data.access_token;
   };
+  fetchUserToken();
 
-  var user_access_token = access_token();
   console.log(user_access_token);
 
 
