@@ -22,7 +22,7 @@ app.get('/webhook', (req, res) => {
     req.query['hub.verify_token'] == VERIFY_TOKEN
   ) {
     require("log-timestamp")
-    console.log("\u001b[1;32m" + "Hub Challenge: " + "\u001b[0m" + challenge)
+    console.log("\u001b[1;32m" + "Hub Challenge: " + "\u001b[0m" + "OK")
     res.send(req.query['hub.challenge']);
   } else {
     require("log-timestamp")
