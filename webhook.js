@@ -83,7 +83,7 @@ app.get('/facebook-authorization', (req, res) => {
     let config_installapp = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: `https://graph.facebook.com/${page_id}/subscribed_apps?subscribed_fields=messaging_in_thread_lead_form_submit&access_token=${page_access_token}`,
+      url: `https://graph.facebook.com/${page_id}/subscribed_apps?subscribed_fields=leadgen&access_token=${page_access_token}`,
       headers: {},
       data: {}
     };
