@@ -88,7 +88,7 @@ app.get('/facebook-authorization', (req, res) => {
     };
 
     let res_installapp = await axios(config_installapp);
-    subscribed_apps = res_installapp.data.success;
+    subscribed_apps = res_installapp.data;
 
     //get app info
     let config_appinfo = {
@@ -100,7 +100,7 @@ app.get('/facebook-authorization', (req, res) => {
     };
 
     let res_appinfo = await axios(config_appinfo);
-    app_info = res_appinfo.data.data[0].name;
+    app_info = res_appinfo.data;
 
   };
 
