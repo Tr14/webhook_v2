@@ -7,7 +7,7 @@ const port = process.env.PORT || 1337; // Use the port of your choice
 
 const VERIFY_TOKEN = 'lmaoez1234';
 const APP_SECRET = 'ae1c496169b0349a4b365bd4d60097d9';
-let client_id = "843916146887327"
+let client_id = "310979735068127"
 let redirect_uri = "https://dev.akadigital.net/facebook-authorization"
 var received_updates = [];
 
