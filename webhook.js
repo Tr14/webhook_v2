@@ -1,5 +1,4 @@
 const express = require('express');
-var xhub = require('express-x-hub');
 const bodyParser = require('body-parser');
 const app = express();
 const port = process.env.PORT || 1337; // Use the port of your choice
@@ -10,7 +9,6 @@ var received_updates = [];
 
 // Middleware to parse incoming JSON data
 app.use(bodyParser.json());
-app.use(xhub({ algorithm: 'sha1', secret: APP_SECRET }));
 
 app.get('/', (req, res) => {
   require("log-timestamp")
@@ -35,18 +33,8 @@ app.get('/webhook', (req, res) => {
 
 app.post('/webhook', (req, res) => {
   require("log-timestamp")
-  console.log("\u001b[1;32m" + "Data: " + "\u001b[0m" + 'Facebook request body:', req.body);
+  console.log("\u001b[1;32m" + "Data: " + "\u001b[0m" + 'Facebook request body:', req.body.entry[0].changed_fields);
 
-  if (!req.isXHubValid()) {
-    require("log-timestamp")
-    console.log("\u001b[1;32m" + "X-Hub: " + "\u001b[0m" + 'Warning - request header X-Hub-Signature not present or invalid');
-    res.sendStatus(401);
-    return;
-  }
-
-  require("log-timestamp")
-  console.log("\u001b[1;32m" + "X-Hub: " + "\u001b[0m" + 'request header X-Hub-Signature validated');
-  // Process the Facebook updates here
   received_updates.unshift(req.body);
   res.sendStatus(200);
 });
