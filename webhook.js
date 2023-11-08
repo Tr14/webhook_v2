@@ -14,7 +14,7 @@ app.use(xhub({ algorithm: 'sha1', secret: APP_SECRET }));
 app.get('/', (req, res) => {
   require("log-timestamp")
   console.log("\u001b[1;32m" + "dev.akadigital.net: " + "\u001b[0m" + req)
-  res.status(200).send("Welcome to AKA webhook");
+  res.send('<pre>' + JSON.stringify(received_updates, null, 2) + '</pre>');
 });
 
 app.get('/webhook', (req, res) => {
