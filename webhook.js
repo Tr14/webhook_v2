@@ -5,6 +5,10 @@ const port = process.env.PORT || 1337; // Use the port of your choice
 
 const VERIFY_TOKEN = 'lmaoez1234';
 
+function timeStamp(message) {
+  console.log('[' + new Date().toISOString().substring(11, 23) + '] -', message)
+}
+
 // Middleware to parse incoming JSON data
 app.use(bodyParser.json());
 
@@ -48,5 +52,5 @@ app.post('/webhook', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Facebook Messenger webhook is running on port ${port}`);
+  timeStamp(`Facebook Messenger webhook is running on port ${port}`);
 });
