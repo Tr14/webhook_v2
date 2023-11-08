@@ -22,7 +22,9 @@ app.get('/', (req, res) => {
 });
 
 app.get('/authorization', (req, res) => {
+  var facebook_authorization_code = req.query.code;
   require("log-timestamp");
+  console.log("\u001b[1;32m" + "Facebook Authorization: " + "\u001b[0m" + facebook_authorization_code);
   res.sendFile(path.join(__dirname, 'public', '/authorization.html'))
 });
 
