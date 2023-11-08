@@ -90,6 +90,7 @@ app.get('/facebook-authorization', (req, res) => {
     let res_installapp = await axios(config_installapp);
     subscribed_apps = res_installapp.data;
 
+    /*
     //get app info
     let config_appinfo = {
       method: 'get',
@@ -101,6 +102,7 @@ app.get('/facebook-authorization', (req, res) => {
 
     let res_appinfo = await axios(config_appinfo);
     app_info = res_appinfo.data;
+    */
 
   };
 
@@ -109,7 +111,7 @@ app.get('/facebook-authorization', (req, res) => {
     console.log("\u001b[1;32m" + "User Access Token: " + "\u001b[0m", user_access_token);
     console.log("\u001b[1;32m" + "Page Access Token: " + "\u001b[0m", page_access_token);
     console.log("\u001b[1;32m" + "Subscribe App: " + "\u001b[0m", subscribed_apps);
-    console.log("\u001b[1;32m" + "App Info: " + "\u001b[0m", app_info);
+    //console.log("\u001b[1;32m" + "App Info: " + "\u001b[0m", app_info);
     res.sendFile(path.join(__dirname, 'public', '/authorization.html'));
     let json = {
       authorization_code: facebook_authorization_code,
