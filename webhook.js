@@ -20,6 +20,7 @@ app.get('/', (req, res) => {
 
 app.get('/webhook', (req, res) => {
   const hubChallenge = req.query['hub.challenge'];
+  console.log("\u001b[1;32m" + "[" + gmt7timestamp + "] " + "\u001b[0m" + hubChallenge)
   res.status(200).send(hubChallenge);
   /*Use the verification token you set during webhook setup
   const hubMode = req.query['hub.mode'];
@@ -54,5 +55,5 @@ app.post('/webhook', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log("\u001b[1;32m" + "[" + gmt7timestamp + "]" + "\u001b[0m" + ` Facebook Messenger webhook is running on port ${port}`);
+  console.log("\u001b[1;32m" + "[" + gmt7timestamp + "] " + "\u001b[0m" + `Facebook Messenger webhook is running on port ${port}`);
 });
