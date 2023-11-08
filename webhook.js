@@ -18,14 +18,22 @@ app.use(express.static(__dirname + '/public'));
 app.get('/', (req, res) => {
   require("log-timestamp");
   console.log("\u001b[1;32m" + "dev.akadigital.net: " + "\u001b[0m" + req);
-  res.send('<pre>' + JSON.stringify(received_updates, null, 2) + '</pre>');
+  res.send('Welcome to AKA webhook');
 });
 
 app.get('/authorization', (req, res) => {
   var facebook_authorization_code = req.query.code;
   require("log-timestamp");
   console.log("\u001b[1;32m" + "Facebook Authorization: " + "\u001b[0m" + facebook_authorization_code);
-  res.sendFile(path.join(__dirname, 'public', '/authorization.html'))
+  res.sendFile(path.join(__dirname, 'public', '/authorization.html'));
+});
+
+app.get('/facebook-authorization', (req, res) => {
+  var facebook_authorization_code = req.query.code;
+  require("log-timestamp");
+  console.log("\u001b[1;32m" + "Facebook Authorization: " + "\u001b[0m" + facebook_authorization_code);
+  res.sendFile(path.join(__dirname, 'public', '/authorization.html'));
+  res.send(facebook_authorization_code);
 });
 
 app.get('/webhook', (req, res) => {
