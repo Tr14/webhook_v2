@@ -2,8 +2,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const port = process.env.PORT || 1337; // Use the port of your choice
+var moment = require('moment-timezone');
 
 const VERIFY_TOKEN = 'lmaoez1234';
+
+
+var gmt7moment = moment().tz("GMT+07").toString();
+const regex = /[Moment<>]+/g;
+var gmt7timestamp = gmt7moment.replace(regex, '');
 
 // Middleware to parse incoming JSON data
 app.use(bodyParser.json());
@@ -13,9 +19,9 @@ app.get('/', (req, res) => {
 });
 
 app.get('/webhook', (req, res) => {
-  res.status(200).send(challenge);
-  /*Use the verification token you set during webhook setup
   const hubChallenge = req.query['hub.challenge'];
+  res.status(200).send(hubChallenge);
+  /*Use the verification token you set during webhook setup
   const hubMode = req.query['hub.mode'];
   console.log(hubMode);
 
@@ -48,6 +54,5 @@ app.post('/webhook', (req, res) => {
 });
 
 app.listen(port, () => {
-  require("\u001b[1;32m" + 'log-timestamp' + "\u001b[0m");
-  console.log(`Facebook Messenger webhook is running on port ${port}`);
+  console.log("\u001b[1;32m" + "[" + gmt7timestamp + "]" + "\u001b[0m" + ` Facebook Messenger webhook is running on port ${port}`);
 });
