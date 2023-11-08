@@ -57,5 +57,5 @@ app.post('/webhook', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.logging(`Facebook Messenger webhook is running on port ${port}`);
+  console.log(`Facebook Messenger webhook is running on port ${port}`);
 });
