@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
   require("log-timestamp")
-  console.log("\u001b[1;32m" + "dev.akadigital.net: " + "\u001b[0m" + hubChallenge)
+  console.log("\u001b[1;32m" + "dev.akadigital.net: " + "\u001b[0m" + "Welcome to AKA webhook")
   res.status(200).send("Welcome to AKA webhook");
 });
 
