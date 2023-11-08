@@ -47,7 +47,7 @@ app.get('/facebook-authorization', (req, res) => {
 
   fetchUserToken().then(() => {
     // You can access responseData here, once the request has completed
-    console.log('Data outside async function:', responseData);
+    console.log('Data outside async function:', user_access_token);
   });
 
 
