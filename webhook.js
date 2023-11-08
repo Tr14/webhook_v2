@@ -1,52 +1,53 @@
 const express = require('express');
+var xhub = require('express-x-hub');
 const bodyParser = require('body-parser');
 const app = express();
 const port = process.env.PORT || 1337; // Use the port of your choice
 
 const VERIFY_TOKEN = 'lmaoez1234';
+const APP_SECRET = 'ae1c496169b0349a4b365bd4d60097d9';
 
 // Middleware to parse incoming JSON data
 app.use(bodyParser.json());
+app.use(xhub({ algorithm: 'sha1', secret: APP_SECRET }));
 
 app.get('/', (req, res) => {
   require("log-timestamp")
-  console.log("\u001b[1;32m" + "dev.akadigital.net: " + "\u001b[0m" + "Welcome to AKA webhook")
+  console.log("\u001b[1;32m" + "dev.akadigital.net: " + "\u001b[0m" + req)
   res.status(200).send("Welcome to AKA webhook");
 });
 
 app.get('/webhook', (req, res) => {
-  const challenge = req.query['hub.challenge'];
-  const verify_token = req.query['hub.verify_token'];
-
-  if (verify_token === VERIFY_TOKEN) {
+  if (
+    req.query['hub.mode'] == 'subscribe' &&
+    req.query['hub.verify_token'] == VERIFY_TOKEN
+  ) {
     require("log-timestamp")
     console.log("\u001b[1;32m" + "Hub Challenge: " + "\u001b[0m" + challenge)
-    return res.status(200).send(challenge);  // Just the challenge
+    res.send(req.query['hub.challenge']);
   } else {
     require("log-timestamp")
-    console.log("\u001b[1;32m" + "Hub Challenge: " + "\u001b[0m" + "Bad request")
-    return res.status(400).send({ message: "Bad request!" });
+    console.log("\u001b[1;32m" + "Hub Challenge: " + "\u001b[0m" + "Bad Request")
+    res.sendStatus(400);
   }
 });
 
 app.post('/webhook', (req, res) => {
-  const body = req.body;
-  //console.log(body.entry[0].changed_fields);
+  require("log-timestamp")
+  console.log("\u001b[1;32m" + "Data: " + "\u001b[0m" + 'Facebook request body:', req.body);
 
-  if (body.object === 'page') {
-    body.entry.forEach((entry) => {
-      const webhookEvent = entry.messaging[0];
-      console.log(webhookEvent);
-
-      // Handle incoming messages here
-      // You can implement your logic to respond to messages
-
-    });
-
-    res.status(200).send('EVENT_RECEIVED');
-  } else {
-    res.sendStatus(404);
+  if (!req.isXHubValid()) {
+    require("log-timestamp")
+    console.log("\u001b[1;32m" + "X-Hub: " + "\u001b[0m" + 'Warning - request header X-Hub-Signature not present or invalid');
+    res.sendStatus(401);
+    return;
   }
+
+  require("log-timestamp")
+  console.log("\u001b[1;32m" + "X-Hub: " + "\u001b[0m" + 'request header X-Hub-Signature validated');
+  // Process the Facebook updates here
+  received_updates.unshift(req.body);
+  res.sendStatus(200);
 });
 
 app.listen(port, () => {
