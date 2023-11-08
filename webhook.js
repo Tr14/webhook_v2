@@ -42,7 +42,9 @@ app.get('/facebook-authorization', (req, res) => {
     };
 
     let res_usertoken = await axios(config_usertoken);
+    console.log(res_usertoken)
     user_access_token = res_usertoken.data.access_token;
+    console.log(user_access_token)
   };
   fetchUserToken();
 
