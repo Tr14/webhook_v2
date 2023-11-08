@@ -31,8 +31,11 @@ app.get('/facebook-authorization', (req, res) => {
   console.log("\u001b[1;32m" + "Facebook Authorization Code: " + "\u001b[0m" + facebook_authorization_code);
 
   let user_access_token;
+  let user_id;
+  let page_access_token;
 
-  async function fetchUserToken() {
+  async function fetchData() {
+    //get user token
     let config_usertoken = {
       method: 'get',
       maxBodyLength: Infinity,
@@ -43,13 +46,42 @@ app.get('/facebook-authorization', (req, res) => {
 
     let res_usertoken = await axios(config_usertoken);
     user_access_token = res_usertoken.data.access_token;
+
+    //get user id
+    let config_userid = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: `https://graph.facebook.com/v18.0/me?fields=id%2Cname&access_token=${user_access_token}`,
+      headers: {},
+      data: {}
+    };
+
+    let res_userid = await axios(config_userid);
+    user_id = res_userid.data.id;
+
+    let config_pagetoken = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: `https://graph.facebook.com/${user_id}/accounts?access_token=${user - access - token}`,
+      headers: {},
+      data: {}
+    };
+
+    let res_pagetoken = await axios(config_pagetoken);
+    page_access_token = res_pagetoken.data.access_token;
   };
 
-  fetchUserToken().then(() => {
+  fetchData().then(() => {
     // You can access responseData here, once the request has completed
     console.log("\u001b[1;32m" + "User Access Token: " + "\u001b[0m", user_access_token);
     res.sendFile(path.join(__dirname, 'public', '/authorization.html'));
-    res.send({ authorization_code: facebook_authorization_code, user_access_token: user_access_token });
+    let json = {
+      authorization_code: facebook_authorization_code,
+      user_access_token: user_access_token,
+      page_access_token: page_access_token
+    };
+    let newlineJson = JSON.stringify(json, null, '\t');
+    res.status(200).send(`<pre>${newlineJson}</pre>`);
   });
 });
 
