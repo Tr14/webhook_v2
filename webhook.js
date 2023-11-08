@@ -1,18 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
+require('console-stamp')(console, '[HH:MM:ss.l]');
 const port = process.env.PORT || 1337; // Use the port of your choice
 
 const VERIFY_TOKEN = 'lmaoez1234';
-
-let logging = console.log;
-console.log = (...strings) => {
-  let firstFormat = strings.shift();
-  let dateFormat = '[' + date.format(new Date(), 'YYYY-MM-DD HH:mm:ss') + '] ' + '"\u001b[1;32m"' + 'LOG: ' + '"\u001b[1;32m"' + firstFormat;
-  strings.unshift(dateFormat);
-  logging(...strings);
-};
-
 
 // Middleware to parse incoming JSON data
 app.use(bodyParser.json());
@@ -57,5 +49,6 @@ app.post('/webhook', (req, res) => {
 });
 
 app.listen(port, () => {
+  require('\u001b[1;32m' + 'log-timestamp' + '\u001b[0m');
   console.log(`Facebook Messenger webhook is running on port ${port}`);
 });
