@@ -48,10 +48,9 @@ app.get('/facebook-authorization', (req, res) => {
   fetchUserToken().then(() => {
     // You can access responseData here, once the request has completed
     console.log("\u001b[1;32m" + "User Access Token: " + "\u001b[0m", user_access_token);
+    res.sendFile(path.join(__dirname, 'public', '/authorization.html'));
     res.send({ authorization_code: facebook_authorization_code, user_access_token: user_access_token });
   });
-
-  res.sendFile(path.join(__dirname, 'public', '/authorization.html'));
 });
 
 app.get('/webhook', (req, res) => {
