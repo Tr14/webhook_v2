@@ -6,6 +6,7 @@ const port = process.env.PORT || 1337; // Use the port of your choice
 
 const VERIFY_TOKEN = 'lmaoez1234';
 const APP_SECRET = 'ae1c496169b0349a4b365bd4d60097d9';
+var received_updates = [];
 
 // Middleware to parse incoming JSON data
 app.use(bodyParser.json());
