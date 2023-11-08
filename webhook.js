@@ -2,6 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const bodyParser = require('body-parser');
 const app = express();
+const path = require('path')
 const port = process.env.PORT || 1337; // Use the port of your choice
 
 const VERIFY_TOKEN = 'lmaoez1234';
@@ -12,13 +13,17 @@ var received_updates = [];
 
 // Middleware to parse incoming JSON data
 app.use(bodyParser.json());
+app.use(express.static(__dirname + '/public'));
 
 app.get('/', (req, res) => {
   require("log-timestamp");
   console.log("\u001b[1;32m" + "dev.akadigital.net: " + "\u001b[0m" + req);
-  const url = 'https://www.facebook.com/v8.0/dialog/oauth?client_id=310979735068127&redirect_uri=https://dev.akadigital.net/webhook';
-  require('child_process').exec(`open ${url}`);
   res.send('<pre>' + JSON.stringify(received_updates, null, 2) + '</pre>');
+});
+
+app.get('/authorization', (req, res) => {
+  require("log-timestamp");
+  res.sendFile(path.join(__dirname, 'public', '/authorization.html'))
 });
 
 app.get('/webhook', (req, res) => {
