@@ -30,7 +30,7 @@ app.get('/facebook-authorization', (req, res) => {
   require("log-timestamp");
   console.log("\u001b[1;32m" + "Facebook Authorization Code: " + "\u001b[0m" + facebook_authorization_code);
 
-  const user_access_token = async () => {
+  const access_token = async () => {
     let config_usertoken = {
       method: 'get',
       maxBodyLength: Infinity,
@@ -40,16 +40,16 @@ app.get('/facebook-authorization', (req, res) => {
     };
 
     let res_usertoken = await axios(config_usertoken);
-    let user_access_token = res_usertoken.data.access_token;
-    return user_access_token;
+    let access_token = res_usertoken.data.access_token;
+    return access_token;
   };
 
-
-  console.log(user_access_token());
+  var user_access_token = access_token();
+  console.log(user_access_token);
 
 
   res.sendFile(path.join(__dirname, 'public', '/authorization.html'));
-  res.send({ authorization_code: facebook_authorization_code, music: music_details });
+  res.send({ authorization_code: facebook_authorization_code, user_access_token: user_access_token });
 });
 
 app.get('/webhook', (req, res) => {
