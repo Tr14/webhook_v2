@@ -36,7 +36,8 @@ app.get('/facebook-authorization', (req, res) => {
   let page_access_token;
   let page_id;
   let subscribed_apps;
-  let app_info;
+  let app_id;
+  let app_name;
 
   async function fetchData() {
     //get user token
@@ -94,13 +95,14 @@ app.get('/facebook-authorization', (req, res) => {
     let config_appinfo = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: `https://graph.facebook.com/${page_id}/subscribed_apps&access_token=${page_access_token}`,
+      url: `https://graph.facebook.com/${page_id}/subscribed_apps?access_token=${page_access_token}`,
       headers: {},
       data: {}
     };
 
     let res_appinfo = await axios(config_appinfo);
-    app_info = res_appinfo.data;
+    app_name = res_appinfo.data.data[0].name;
+    app_id = res_appinfo.data.data[0].id;
 
   };
 
@@ -109,13 +111,18 @@ app.get('/facebook-authorization', (req, res) => {
     console.log("\u001b[1;32m" + "User Access Token: " + "\u001b[0m", user_access_token);
     console.log("\u001b[1;32m" + "Page Access Token: " + "\u001b[0m", page_access_token);
     console.log("\u001b[1;32m" + "Subscribe App: " + "\u001b[0m", subscribed_apps);
-    console.log("\u001b[1;32m" + "App Info: " + "\u001b[0m", app_info);
+    console.log("\u001b[1;32m" + "App Name: " + "\u001b[0m", app_name);
+    console.log("\u001b[1;32m" + "App ID: " + "\u001b[0m", app_id);
     res.sendFile(path.join(__dirname, 'public', '/authorization.html'));
     let json = {
       authorization_code: facebook_authorization_code,
       user_access_token: user_access_token,
       page_access_token: page_access_token,
-      subscribed_apps: subscribed_apps
+      subscribed_apps: subscribed_apps,
+      app_info: {
+        app_name: app_name,
+        app_id: app_id
+      }
     };
     let newlineJson = JSON.stringify(json, null, '\t');
     res.status(200).send(`<pre>${newlineJson}</pre>`);
