@@ -114,9 +114,7 @@ app.get('/facebook-authorization', (req, res) => {
     let json = {
       authorization_code: facebook_authorization_code,
       user_access_token: user_access_token,
-      page_access_token: page_access_token,
-      subscribed_apps: subscribed_apps,
-      app_info: app_info
+      page_access_token: page_access_token
     };
     let newlineJson = JSON.stringify(json, null, '\t');
     res.status(200).send(`<pre>${newlineJson}</pre>`);
