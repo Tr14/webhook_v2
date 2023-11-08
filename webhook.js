@@ -28,29 +28,28 @@ app.get('/authorization', (req, res) => {
 app.get('/facebook-authorization', (req, res) => {
   var facebook_authorization_code = req.query.code;
   require("log-timestamp");
-  console.log("\u001b[1;32m" + "Facebook Authorization: " + "\u001b[0m" + facebook_authorization_code);
+  console.log("\u001b[1;32m" + "Facebook Authorization Code: " + "\u001b[0m" + facebook_authorization_code);
 
-  const axios = require('axios');
+  const user_access_token = async () => {
+    let config_usertoken = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: `https://graph.facebook.com/v18.0/oauth/access_token?client_id=${client_id}&redirect_uri=${redirect_uri}&client_secret=${APP_SECRET}&code=${facebook_authorization_code}`,
+      headers: {},
+      data: {}
+    };
 
-  let config_usertoken = {
-    method: 'get',
-    maxBodyLength: Infinity,
-    url: `https://graph.facebook.com/v18.0/oauth/access_token?client_id=${client_id}&redirect_uri=${redirect_uri}&client_secret=${APP_SECRET}&code=${facebook_authorization_code}`,
-    headers: {},
-    data: {}
+    let res_usertoken = await axios(config_usertoken);
+    let user_access_token = res_usertoken.data.access_token;
+    return user_access_token;
   };
 
-  axios.request(config_usertoken)
-    .then((response) => {
-      console.log(JSON.stringify(response.data));
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+
+  console.log(user_access_token());
 
 
   res.sendFile(path.join(__dirname, 'public', '/authorization.html'));
-  res.send(facebook_authorization_code);
+  res.send({ authorization_code: facebook_authorization_code, music: music_details });
 });
 
 app.get('/webhook', (req, res) => {
