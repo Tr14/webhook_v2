@@ -48,6 +48,6 @@ app.post('/webhook', (req, res) => {
 });
 
 app.listen(port, () => {
-  require('log-timestamp');
+  require("\u001b[1;32m" + 'log-timestamp' + "\u001b[0m");
   console.log(`Facebook Messenger webhook is running on port ${port}`);
 });
