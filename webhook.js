@@ -69,7 +69,7 @@ app.get('/facebook-authorization', (req, res) => {
     };
 
     let res_pagetoken = await axios(config_pagetoken);
-    page_access_token = res_pagetoken.data[0].access_token;
+    page_access_token = res_pagetoken;
   };
 
   fetchData().then(() => {
