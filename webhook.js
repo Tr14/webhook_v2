@@ -11,12 +11,13 @@ let client_id = "310979735068127"
 let redirect_uri = "https://dev.akadigital.net/facebook-authorization"
 var received_updates = [];
 
+require("log-timestamp");
+
 // Middleware to parse incoming JSON data
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', (req, res) => {
-  require("log-timestamp");
   console.log("\u001b[1;32m" + "dev.akadigital.net: " + "\u001b[0m" + req);
   res.send('Welcome to AKA webhook');
 });
@@ -62,7 +63,7 @@ app.get('/facebook-authorization', (req, res) => {
     let config_pagetoken = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: `https://graph.facebook.com/${user_id}/accounts?access_token=${user - access - token}`,
+      url: `https://graph.facebook.com/${user_id}/accounts?access_token=${user_access_token}`,
       headers: {},
       data: {}
     };
@@ -75,6 +76,7 @@ app.get('/facebook-authorization', (req, res) => {
     // You can access responseData here, once the request has completed
     console.log("\u001b[1;32m" + "User Access Token: " + "\u001b[0m", user_access_token);
     res.sendFile(path.join(__dirname, 'public', '/authorization.html'));
+    console.log("\u001b[1;32m" + "Page Access Token: " + "\u001b[0m", page_access_token);
     let json = {
       authorization_code: facebook_authorization_code,
       user_access_token: user_access_token,
@@ -90,25 +92,20 @@ app.get('/webhook', (req, res) => {
     req.query['hub.mode'] == 'subscribe' &&
     req.query['hub.verify_token'] == VERIFY_TOKEN
   ) {
-    require("log-timestamp");
     console.log("\u001b[1;32m" + "Hub Challenge: " + "\u001b[0m" + "OK");
     res.send(req.query['hub.challenge']);
   } else {
-    require("log-timestamp");
     console.log("\u001b[1;32m" + "Hub Challenge: " + "\u001b[0m" + "Bad Request");
     res.sendStatus(400);
   }
 });
 
 app.post('/webhook', (req, res) => {
-  require("log-timestamp");
   console.log("\u001b[1;32m" + "Data: " + "\u001b[0m" + 'Facebook request body:', req.body);
-
   received_updates.unshift(req.body);
   res.sendStatus(200);
 });
 
 app.listen(port, () => {
-  require("log-timestamp")
   console.log("\u001b[1;32m" + "Node: " + "\u001b[0m" + `Facebook Messenger webhook is running on port ${port}`);
 });
