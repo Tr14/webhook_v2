@@ -144,6 +144,7 @@ app.get('/webhook', (req, res) => {
 
 app.post('/webhook', (req, res) => {
   console.log("\u001b[1;32m" + "Data: " + "\u001b[0m" + 'Facebook request body:', req.body);
+  console.log("\u001b[1;32m" + "Data: " + "\u001b[0m" + 'Facebook request body detail:', req.body.entry[0].changes);
   received_updates.unshift(req.body);
   res.sendStatus(200);
 });
